@@ -1,0 +1,184 @@
+:root {
+  --bg-color: #05070c;
+  --bg-cockpit: #0b0f19;
+  --bg-panel: rgba(16, 22, 37, 0.85);
+  --bg-card: rgba(22, 30, 49, 0.6);
+  --border-color: rgba(255, 255, 255, 0.07);
+  --border-glow-green: rgba(16, 185, 129, 0.3);
+  --border-glow-amber: rgba(245, 158, 11, 0.3);
+  
+  --text-primary: #f3f4f6;
+  --text-secondary: #9ca3af;
+  --text-muted: #6b7280;
+  
+  --glow-green: #10b981;
+  --glow-amber: #f59e0b;
+  --glow-red: #ef4444;
+  --glow-blue: #3b82f6;
+
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html, body {
+  height: 100%;
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.05) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(245, 158, 11, 0.03) 0px, transparent 50%),
+    radial-gradient(at 50% 100%, rgba(59, 130, 246, 0.03) 0px, transparent 50%);
+  background-attachment: fixed;
+}
+
+/* Custom Scrollbar for Flight Deck aesthetic */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-color);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-glow-green);
+  box-shadow: 0 0 5px var(--glow-green);
+}
+
+/* Utilities for Instrumental Panels */
+.glass-panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+}
+
+.glass-panel-active {
+  border-color: rgba(16, 185, 129, 0.4);
+  box-shadow: 
+    0 8px 32px 0 rgba(0, 0, 0, 0.4),
+    0 0 15px rgba(16, 185, 129, 0.1);
+}
+
+.glow-text-green {
+  color: var(--glow-green);
+  text-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
+}
+
+.glow-text-amber {
+  color: var(--glow-amber);
+  text-shadow: 0 0 8px rgba(245, 158, 11, 0.5);
+}
+
+.glow-text-red {
+  color: var(--glow-red);
+  text-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
+}
+
+.glow-text-blue {
+  color: var(--glow-blue);
+  text-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
+}
+
+.btn-cockpit {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-cockpit:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--text-secondary);
+}
+
+.btn-cockpit-green {
+  border-color: rgba(16, 185, 129, 0.4);
+  background: rgba(16, 185, 129, 0.05);
+  color: var(--glow-green);
+}
+
+.btn-cockpit-green:hover:not(:disabled) {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: var(--glow-green);
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.25);
+}
+
+.btn-cockpit-amber {
+  border-color: rgba(245, 158, 11, 0.4);
+  background: rgba(245, 158, 11, 0.05);
+  color: var(--glow-amber);
+}
+
+.btn-cockpit-amber:hover:not(:disabled) {
+  background: rgba(245, 158, 11, 0.15);
+  border-color: var(--glow-amber);
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.25);
+}
+
+.btn-cockpit-red {
+  border-color: rgba(239, 68, 68, 0.4);
+  background: rgba(239, 68, 68, 0.05);
+  color: var(--glow-red);
+}
+
+.btn-cockpit-red:hover:not(:disabled) {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: var(--glow-red);
+  box-shadow: 0 0 12px rgba(239, 68, 68, 0.25);
+}
+
+/* Gauge styling */
+.progress-ring-circle {
+  transition: stroke-dashoffset 0.35s;
+  transform: rotate(-90deg);
+  transform-origin: 50% 50%;
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 0.3;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.1);
+  }
+  50% {
+    opacity: 0.7;
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+  }
+}
+
+.indicator-pulse {
+  animation: pulse-glow 2s infinite ease-in-out;
+}
+
+@media (max-width: 768px) {
+  .desktop-only {
+    display: none !important;
+  }
+}
