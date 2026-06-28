@@ -284,14 +284,16 @@ export default function Header() {
         )}
 
         {/* Settings Cog */}
-        <button 
-          onClick={() => setShowSettings(true)} 
-          className="btn-cockpit" 
-          style={{ padding: "8px" }}
-          title="Ustawienia chmury"
-        >
-          <Settings style={{ width: "18px", height: "18px" }} />
-        </button>
+        {!envHasClientId && (
+          <button 
+            onClick={() => setShowSettings(true)} 
+            className="btn-cockpit" 
+            style={{ padding: "8px" }}
+            title="Ustawienia chmury"
+          >
+            <Settings style={{ width: "18px", height: "18px" }} />
+          </button>
+        )}
       </div>
 
       {/* Settings Modal Overlay */}
