@@ -69,9 +69,16 @@ export default function Header() {
     setSyncStatus("idle");
     setSyncMessage("Uwierzytelnianie...");
 
+    // Safety timeout: reset state if Google callback is never received (e.g. on blocked domains)
+    const loginTimeout = setTimeout(() => {
+      setSyncStatus("error");
+      setSyncMessage("Przekroczono limit czasu. Sprawdź F12/Origin.");
+    }, 15000);
+
     requestGoogleToken(
       clientId,
       async (accessToken) => {
+        clearTimeout(loginTimeout);
         setToken(accessToken);
         sessionStorage.setItem("ppla_google_token", accessToken);
         
@@ -88,6 +95,7 @@ export default function Header() {
         }
       },
       (err) => {
+        clearTimeout(loginTimeout);
         console.error("Google Auth Error:", err);
         setSyncStatus("error");
         setSyncMessage(`Logowanie nieudane: ${err}`);
