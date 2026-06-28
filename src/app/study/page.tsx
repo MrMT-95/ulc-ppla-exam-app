@@ -71,10 +71,18 @@ export default function StudyPage() {
         setLoading(false);
       });
 
-    // Load localStorage data
-    setCorrectList(JSON.parse(localStorage.getItem("ppla_correct_answers") || "{}"));
-    setIncorrectList(JSON.parse(localStorage.getItem("ppla_incorrect_answers") || "{}"));
-    setBookmarks(JSON.parse(localStorage.getItem("ppla_bookmarks") || "{}"));
+    const loadLocalData = () => {
+      setCorrectList(JSON.parse(localStorage.getItem("ppla_correct_answers") || "{}"));
+      setIncorrectList(JSON.parse(localStorage.getItem("ppla_incorrect_answers") || "{}"));
+      setBookmarks(JSON.parse(localStorage.getItem("ppla_bookmarks") || "{}"));
+    };
+
+    loadLocalData();
+
+    window.addEventListener("storage", loadLocalData);
+    return () => {
+      window.removeEventListener("storage", loadLocalData);
+    };
   }, []);
 
   // Filtered list of questions

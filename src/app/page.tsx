@@ -46,36 +46,44 @@ export default function Home() {
   const [confirmReset, setConfirmReset] = useState(false);
 
   useEffect(() => {
-    // Load stats from localStorage
-    const correctAns = JSON.parse(localStorage.getItem("ppla_correct_answers") || "{}");
-    const incorrectAns = JSON.parse(localStorage.getItem("ppla_incorrect_answers") || "{}");
-    const bookmarks = JSON.parse(localStorage.getItem("ppla_bookmarks") || "{}");
-    const exams = JSON.parse(localStorage.getItem("ppla_exams_history") || "[]");
+    const loadStats = () => {
+      const correctAns = JSON.parse(localStorage.getItem("ppla_correct_answers") || "{}");
+      const incorrectAns = JSON.parse(localStorage.getItem("ppla_incorrect_answers") || "{}");
+      const bookmarks = JSON.parse(localStorage.getItem("ppla_bookmarks") || "{}");
+      const exams = JSON.parse(localStorage.getItem("ppla_exams_history") || "[]");
 
-    const correctIds = Object.keys(correctAns);
-    const incorrectIds = Object.keys(incorrectAns);
-    const seenIds = Array.from(new Set([...correctIds, ...incorrectIds]));
+      const correctIds = Object.keys(correctAns);
+      const incorrectIds = Object.keys(incorrectAns);
+      const seenIds = Array.from(new Set([...correctIds, ...incorrectIds]));
 
-    // Calculate category correctness
-    const catCorrect: Record<string, number> = {};
-    CATEGORIES.forEach(cat => {
-      catCorrect[cat.code] = 0;
-    });
+      // Calculate category correctness
+      const catCorrect: Record<string, number> = {};
+      CATEGORIES.forEach(cat => {
+        catCorrect[cat.code] = 0;
+      });
 
-    correctIds.forEach(id => {
-      const codeMatch = id.match(/^(PL\d+)/);
-      if (codeMatch && catCorrect[codeMatch[1]] !== undefined) {
-        catCorrect[codeMatch[1]]++;
-      }
-    });
+      correctIds.forEach(id => {
+        const codeMatch = id.match(/^(PL\d+)/);
+        if (codeMatch && catCorrect[codeMatch[1]] !== undefined) {
+          catCorrect[codeMatch[1]]++;
+        }
+      });
 
-    setStats({
-      correctAnsweredCount: correctIds.length,
-      seenCount: seenIds.length,
-      bookmarkCount: Object.keys(bookmarks).filter(id => bookmarks[id]).length,
-      examAttempts: exams,
-      categoryCorrect: catCorrect,
-    });
+      setStats({
+        correctAnsweredCount: correctIds.length,
+        seenCount: seenIds.length,
+        bookmarkCount: Object.keys(bookmarks).filter(id => bookmarks[id]).length,
+        examAttempts: exams,
+        categoryCorrect: catCorrect,
+      });
+    };
+
+    loadStats();
+    
+    window.addEventListener("storage", loadStats);
+    return () => {
+      window.removeEventListener("storage", loadStats);
+    };
   }, []);
 
   const resetAllProgress = () => {

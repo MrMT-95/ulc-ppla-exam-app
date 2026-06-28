@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Outfit } from "next/font/google";
-import Link from "next/link";
+import Script from "next/script";
+import Header from "@/components/Header";
 import "./globals.css";
 
 const outfit = Outfit({
@@ -26,81 +27,8 @@ export default function RootLayout({
   return (
     <html lang="pl" className={`${outfit.variable} ${inter.variable}`}>
       <body style={{ fontFamily: "var(--font-inter), sans-serif" }}>
-        <header
-          style={{
-            background: "var(--bg-cockpit)",
-            borderBottom: "1px solid var(--border-color)",
-            padding: "16px 24px",
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            position: "sticky",
-            top: 0,
-            zIndex: 100,
-            backdropFilter: "blur(12px)",
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-            <div
-              style={{
-                width: "12px",
-                height: "12px",
-                borderRadius: "50%",
-                backgroundColor: "var(--glow-green)",
-                boxShadow: "0 0 10px var(--glow-green)",
-              }}
-              className="indicator-pulse"
-            />
-            <Link href="/" style={{ textDecoration: "none" }}>
-              <span
-                style={{
-                  fontFamily: "var(--font-outfit), sans-serif",
-                  fontSize: "1.25rem",
-                  fontWeight: 700,
-                  letterSpacing: "1px",
-                  color: "var(--text-primary)",
-                }}
-              >
-                PPLA <span className="glow-text-green">FLIGHT DECK</span>
-              </span>
-            </Link>
-          </div>
-
-          <nav style={{ display: "flex", gap: "16px" }}>
-            <Link href="/" className="btn-cockpit">
-              Pulpit
-            </Link>
-            <Link href="/study" className="btn-cockpit btn-cockpit-green">
-              Trening
-            </Link>
-            <Link href="/exam" className="btn-cockpit btn-cockpit-amber">
-              Symulator Egzaminu
-            </Link>
-          </nav>
-
-          {/* Simulated HUD Flight Indicators */}
-          <div
-            style={{
-              display: "flex",
-              gap: "16px",
-              fontSize: "0.75rem",
-              fontFamily: "var(--font-mono)",
-              color: "var(--text-muted)",
-            }}
-            className="desktop-only"
-          >
-            <div>
-              SYS: <span style={{ color: "var(--glow-green)" }}>OK</span>
-            </div>
-            <div>
-              ALT DATA: <span style={{ color: "var(--glow-green)" }}>LOADED</span>
-            </div>
-            <div>
-              PWR: <span style={{ color: "var(--glow-amber)" }}>STABLE</span>
-            </div>
-          </div>
-        </header>
-
+        <Header />
+        
         <main style={{ flex: 1, padding: "24px", maxWidth: "1200px", width: "100%", margin: "0 auto" }}>
           {children}
         </main>
@@ -117,6 +45,9 @@ export default function RootLayout({
         >
           <p>© {new Date().getFullYear()} PPLA Flight Deck. Baza pytań Urzędu Lotnictwa Cywilnego (ULC).</p>
         </footer>
+        
+        {/* Load Google OAuth SDK */}
+        <Script src="https://accounts.google.com/gsi/client" strategy="lazyOnload" />
       </body>
     </html>
   );
