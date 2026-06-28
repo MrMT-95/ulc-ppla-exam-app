@@ -15,7 +15,9 @@ import {
 } from "@/utils/googleDriveSync";
 
 export default function Header() {
-  const [clientId, setClientId] = useState<string>("");
+  const [clientId, setClientId] = useState<string>(() => {
+    return process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "";
+  });
   const [customClientId, setCustomClientId] = useState<string>("");
   const [token, setToken] = useState<string | null>(null);
   const [userEmail, setUserEmail] = useState<string | null>(null);
@@ -27,15 +29,14 @@ export default function Header() {
   
   // UI states
   const [showSettings, setShowSettings] = useState(false);
-  const [envHasClientId, setEnvHasClientId] = useState(false);
+  const [envHasClientId, setEnvHasClientId] = useState<boolean>(() => {
+    return !!process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+  });
 
   // Load Client ID on mount
   useEffect(() => {
     const envId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
-    if (envId) {
-      setClientId(envId);
-      setEnvHasClientId(true);
-    } else {
+    if (!envId) {
       const savedId = localStorage.getItem("ppla_google_client_id") || "";
       setClientId(savedId);
       setCustomClientId(savedId);
@@ -287,7 +288,7 @@ export default function Header() {
             style={{ padding: "8px 12px", fontSize: "0.85rem" }}
           >
             <CloudOff style={{ width: "14px", height: "14px", marginRight: "4px" }} />
-            Chmura: Zaloguj
+            Kontynuuj z Google
           </button>
         )}
 

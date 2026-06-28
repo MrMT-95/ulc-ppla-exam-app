@@ -58,6 +58,11 @@ export default function StudyPage() {
   const [incorrectList, setIncorrectList] = useState<Record<string, boolean>>({});
   const [bookmarks, setBookmarks] = useState<Record<string, boolean>>({});
 
+  // Snapshots for filtering to prevent questions from disappearing instantly upon answering
+  const [correctSnapshot, setCorrectSnapshot] = useState<Record<string, boolean>>({});
+  const [incorrectSnapshot, setIncorrectSnapshot] = useState<Record<string, boolean>>({});
+  const [bookmarksSnapshot, setBookmarksSnapshot] = useState<Record<string, boolean>>({});
+
   // Fetch all questions
   useEffect(() => {
     fetch("/data/questions.json")
@@ -72,9 +77,18 @@ export default function StudyPage() {
       });
 
     const loadLocalData = () => {
-      setCorrectList(JSON.parse(localStorage.getItem("ppla_correct_answers") || "{}"));
-      setIncorrectList(JSON.parse(localStorage.getItem("ppla_incorrect_answers") || "{}"));
-      setBookmarks(JSON.parse(localStorage.getItem("ppla_bookmarks") || "{}"));
+      const c = JSON.parse(localStorage.getItem("ppla_correct_answers") || "{}");
+      const i = JSON.parse(localStorage.getItem("ppla_incorrect_answers") || "{}");
+      const b = JSON.parse(localStorage.getItem("ppla_bookmarks") || "{}");
+
+      setCorrectList(c);
+      setIncorrectList(i);
+      setBookmarks(b);
+
+      // Force update snapshots if triggered by a storage event (e.g. cloud sync)
+      setCorrectSnapshot(c);
+      setIncorrectSnapshot(i);
+      setBookmarksSnapshot(b);
     };
 
     loadLocalData();
@@ -93,18 +107,18 @@ export default function StudyPage() {
         return false;
       }
       // Status filter
-      if (statusFilter === "BOOKMARKED" && !bookmarks[q.id]) {
+      if (statusFilter === "BOOKMARKED" && !bookmarksSnapshot[q.id]) {
         return false;
       }
-      if (statusFilter === "INCORRECT" && !incorrectList[q.id]) {
+      if (statusFilter === "INCORRECT" && !incorrectSnapshot[q.id]) {
         return false;
       }
-      if (statusFilter === "UNRESOLVED" && (correctList[q.id] || incorrectList[q.id])) {
+      if (statusFilter === "UNRESOLVED" && (correctSnapshot[q.id] || incorrectSnapshot[q.id])) {
         return false;
       }
       return true;
     });
-  }, [questions, selectedCategory, statusFilter, bookmarks, correctList, incorrectList]);
+  }, [questions, selectedCategory, statusFilter, bookmarksSnapshot, correctSnapshot, incorrectSnapshot]);
 
   // Current Question object
   const currentQuestion = useMemo(() => {
@@ -114,8 +128,16 @@ export default function StudyPage() {
     return filteredQuestions[currentIdx];
   }, [filteredQuestions, currentIdx]);
 
-  // Reset index when filters change
+  // Reset index and load fresh snapshots when filters change
   useEffect(() => {
+    const c = JSON.parse(localStorage.getItem("ppla_correct_answers") || "{}");
+    const i = JSON.parse(localStorage.getItem("ppla_incorrect_answers") || "{}");
+    const b = JSON.parse(localStorage.getItem("ppla_bookmarks") || "{}");
+
+    setCorrectSnapshot(c);
+    setIncorrectSnapshot(i);
+    setBookmarksSnapshot(b);
+
     setCurrentIdx(0);
     setSelectedAnswer(null);
     setIsAnswered(false);
@@ -333,7 +355,9 @@ export default function StudyPage() {
                 let optionStyle: React.CSSProperties = {
                   padding: "16px 20px",
                   borderRadius: "8px",
-                  border: "1px solid var(--border-color)",
+                  borderWidth: "1px",
+                  borderStyle: "solid",
+                  borderColor: "var(--border-color)",
                   background: "rgba(255,255,255,0.02)",
                   color: "var(--text-primary)",
                   textAlign: "left",

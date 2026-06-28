@@ -127,15 +127,15 @@ export default function ExamPage() {
       // Distribute 120 questions proportionally based on size of category pools
       const targetCount = selectedConfig.questionCount;
       const totalAvailable = questionsPool.length;
-      
+
       let allocatedCount = 0;
       categories.forEach((cat, idx) => {
         const catPool = questionsByCategory[cat];
         let proportion = Math.round((catPool.length / totalAvailable) * targetCount);
-        
+
         // Ensure at least 1 question per category, and round up/down correctly
         if (proportion === 0 && catPool.length > 0) proportion = 1;
-        
+
         // Pick random questions from this category
         const shuffledCat = shuffleArray(catPool).slice(0, proportion);
         selectedQs.push(...shuffledCat);
@@ -306,7 +306,7 @@ export default function ExamPage() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-      
+
       {/* PHASE 1: SETUP SCREEN */}
       {phase === 'SETUP' && (
         <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "24px" }}>
@@ -385,7 +385,7 @@ export default function ExamPage() {
               className="btn-cockpit btn-cockpit-green"
               style={{ padding: "16px", fontSize: "1.1rem", marginTop: "12px", fontWeight: 700 }}
             >
-              Uruchom Procedurę Egzaminacyjną (Start)
+              Uruchom Procedurę Egzaminacyjną
             </button>
           </div>
         </div>
@@ -394,10 +394,10 @@ export default function ExamPage() {
       {/* PHASE 2: EXAM RUNNING SCREEN */}
       {phase === 'RUNNING' && currentQuestion && (
         <div style={{ display: "grid", gridTemplateColumns: "1fr 280px", gap: "24px" }} className="exam-layout">
-          
+
           {/* Main Question Column */}
           <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-            
+
             {/* Top HUD */}
             <div className="glass-panel" style={{ padding: "16px 20px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
               <div>
@@ -473,18 +473,18 @@ export default function ExamPage() {
 
             {/* Next/Prev Nav */}
             <div style={{ display: "flex", justifyContent: "space-between" }}>
-              <button 
-                onClick={handlePrev} 
-                disabled={currentIdx === 0} 
-                className="btn-cockpit" 
+              <button
+                onClick={handlePrev}
+                disabled={currentIdx === 0}
+                className="btn-cockpit"
                 style={{ opacity: currentIdx === 0 ? 0.4 : 1 }}
               >
                 <ChevronLeft style={{ width: "20px", height: "20px" }} /> Poprzednie
               </button>
-              
-              <button 
-                onClick={handleNext} 
-                disabled={currentIdx === examQuestions.length - 1} 
+
+              <button
+                onClick={handleNext}
+                disabled={currentIdx === examQuestions.length - 1}
                 className="btn-cockpit"
                 style={{ opacity: currentIdx === examQuestions.length - 1 ? 0.4 : 1 }}
               >
@@ -499,7 +499,7 @@ export default function ExamPage() {
               <div style={{ fontSize: "0.85rem", fontFamily: "var(--font-mono)", color: "var(--text-muted)", borderBottom: "1px solid var(--border-color)", paddingBottom: "10px" }}>
                 NAV RADAR ({answeredCount} / {examQuestions.length})
               </div>
-              
+
               {/* Question buttons grid */}
               <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "8px", maxHeight: "300px", overflowY: "auto", paddingRight: "4px" }}>
                 {examQuestions.map((q, idx) => {
@@ -551,7 +551,7 @@ export default function ExamPage() {
                 className="btn-cockpit btn-cockpit-amber"
                 style={{ width: "100%", padding: "12px", fontWeight: 700, marginTop: "10px" }}
               >
-                Złóż plan (Zakończ test)
+                Zakończ test
               </button>
             </div>
           </div>
@@ -573,7 +573,7 @@ export default function ExamPage() {
       {/* PHASE 3: EXAM FINISHED SCREEN */}
       {phase === 'FINISHED' && (
         <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "32px" }}>
-          
+
           {/* Header Summary Panel */}
           <div className="glass-panel" style={{ padding: "32px", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "28px", alignItems: "center" }}>
             {/* Score Ring Gauge */}
@@ -581,14 +581,14 @@ export default function ExamPage() {
               <div style={{ position: "relative", width: "160px", height: "160px" }}>
                 <svg width="160" height="160">
                   <circle cx="80" cy="80" r="70" stroke="rgba(255,255,255,0.05)" strokeWidth="8" fill="transparent" />
-                  <circle 
-                    cx="80" 
-                    cy="80" 
-                    r="70" 
-                    stroke={examResult.passed ? "var(--glow-green)" : "var(--glow-red)"} 
-                    strokeWidth="8" 
-                    fill="transparent" 
-                    strokeDasharray={2 * Math.PI * 70} 
+                  <circle
+                    cx="80"
+                    cy="80"
+                    r="70"
+                    stroke={examResult.passed ? "var(--glow-green)" : "var(--glow-red)"}
+                    strokeWidth="8"
+                    fill="transparent"
+                    strokeDasharray={2 * Math.PI * 70}
                     strokeDashoffset={2 * Math.PI * 70 * (1 - examResult.score / 100)}
                     style={{
                       transform: "rotate(-90deg)",
@@ -607,10 +607,10 @@ export default function ExamPage() {
                 </div>
               </div>
 
-              <div 
-                style={{ 
-                  fontSize: "1.35rem", 
-                  fontWeight: 800, 
+              <div
+                style={{
+                  fontSize: "1.35rem",
+                  fontWeight: 800,
                   letterSpacing: "1px",
                   color: examResult.passed ? "var(--glow-green)" : "var(--glow-red)",
                   textShadow: "0 0 10px " + (examResult.passed ? "rgba(16, 185, 129, 0.4)" : "rgba(239, 68, 68, 0.4)")
@@ -664,13 +664,13 @@ export default function ExamPage() {
                   const percent = Math.round((score.correct / score.total) * 100);
                   const isPassed = percent >= 75;
                   return (
-                    <div 
-                      key={catCode} 
-                      style={{ 
-                        padding: "16px", 
-                        background: "rgba(255,255,255,0.01)", 
-                        border: "1px solid " + (isPassed ? "rgba(16, 185, 129, 0.15)" : "rgba(239, 68, 68, 0.15)"), 
-                        borderRadius: "8px" 
+                    <div
+                      key={catCode}
+                      style={{
+                        padding: "16px",
+                        background: "rgba(255,255,255,0.01)",
+                        border: "1px solid " + (isPassed ? "rgba(16, 185, 129, 0.15)" : "rgba(239, 68, 68, 0.15)"),
+                        borderRadius: "8px"
                       }}
                     >
                       <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.85rem", fontWeight: 600, marginBottom: "8px" }}>
@@ -697,17 +697,17 @@ export default function ExamPage() {
               <h3 style={{ fontFamily: "var(--font-outfit), sans-serif", fontSize: "1.25rem", display: "flex", alignItems: "center", gap: "8px" }}>
                 <Eye /> Debriefing - Analiza Pytań
               </h3>
-              
+
               <div style={{ display: "flex", gap: "8px" }}>
-                <button 
-                  onClick={() => setReviewFilter('ALL')} 
+                <button
+                  onClick={() => setReviewFilter('ALL')}
                   className={"btn-cockpit " + (reviewFilter === 'ALL' ? 'btn-cockpit-green' : '')}
                   style={{ padding: "6px 12px", fontSize: "0.85rem" }}
                 >
                   Wszystkie ({examQuestions.length})
                 </button>
-                <button 
-                  onClick={() => setReviewFilter('INCORRECT')} 
+                <button
+                  onClick={() => setReviewFilter('INCORRECT')}
                   className={"btn-cockpit " + (reviewFilter === 'INCORRECT' ? 'btn-cockpit-red' : '')}
                   style={{ padding: "6px 12px", fontSize: "0.85rem" }}
                 >
@@ -721,15 +721,15 @@ export default function ExamPage() {
               {reviewQuestions.map((q, rIdx) => {
                 const userAns = userAnswers[q.id];
                 const isCorrect = userAns === q.correct_answer;
-                
+
                 return (
-                  <div 
-                    key={q.id} 
-                    style={{ 
-                      padding: "20px", 
-                      background: "rgba(255,255,255,0.01)", 
-                      border: "1px solid " + (isCorrect ? "rgba(16, 185, 129, 0.15)" : "rgba(239, 68, 68, 0.2)"), 
-                      borderRadius: "8px" 
+                  <div
+                    key={q.id}
+                    style={{
+                      padding: "20px",
+                      background: "rgba(255,255,255,0.01)",
+                      border: "1px solid " + (isCorrect ? "rgba(16, 185, 129, 0.15)" : "rgba(239, 68, 68, 0.2)"),
+                      borderRadius: "8px"
                     }}
                   >
                     {/* Header */}
@@ -753,7 +753,7 @@ export default function ExamPage() {
                           <strong>Twoja odpowiedź:</strong> {userAns || <span style={{ fontStyle: "italic", color: "var(--text-muted)" }}>[Brak odpowiedzi]</span>}
                         </div>
                       </div>
-                      
+
                       {!isCorrect && (
                         <div style={{ display: "flex", alignItems: "flex-start", gap: "8px", color: "var(--glow-green)" }}>
                           <Check style={{ flexShrink: 0, marginTop: "2px" }} />
@@ -766,7 +766,7 @@ export default function ExamPage() {
                   </div>
                 );
               })}
-              
+
               {reviewQuestions.length === 0 && (
                 <div style={{ textAlign: "center", padding: "20px", color: "var(--text-secondary)" }}>
                   Brak pytań do wyświetlenia.
